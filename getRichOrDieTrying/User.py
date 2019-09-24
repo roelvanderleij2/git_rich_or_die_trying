@@ -3,5 +3,7 @@ class User:
         self.name = name
         self.cash = start_cash
 
+
+
     def name(self):
         return self.name

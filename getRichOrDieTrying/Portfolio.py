@@ -8,8 +8,9 @@ class Portfolio:
         #make a list/dictionary of the financial products in your portfolio and update when one is added through Order class
         print("update portfolio")
 
-    def show_value(self, security, amount):
+    def show_value(self):
+        market.Value(self.fin_products)
         print("Show value")
 
-    def show_value_hist(self, security, date_range):
+    def show_value_hist(self, date_range):
         print("Show value history")
