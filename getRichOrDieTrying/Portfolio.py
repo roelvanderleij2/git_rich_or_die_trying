@@ -25,8 +25,8 @@ class Portfolio:
                     if product_mutations[product] >= 0:
                         self.fin_products[product] = product_mutations[product]
 
-    def value(self, market):
-        securities_value = market.value(self.fin_products)
+    def value(self, market, date):
+        securities_value = market.value(self.fin_products, date)
         return securities_value + self.cash_amount
 
     def show_value_hist(self, date_range):

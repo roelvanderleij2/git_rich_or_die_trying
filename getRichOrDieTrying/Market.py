@@ -2,9 +2,9 @@ import requests
 import pandas as pd
 
 class Market:
-    def __init__(self, security_data):
-        self.security_data = security_data
-
+    security_data = {}
+    def __init__(self):
+       pass
 
     def load(self, ticker):
         response = requests.get(
@@ -33,11 +33,18 @@ class Market:
         # Let's fix the column names
         df.rename(columns=lambda s: s[3:], inplace=True)
 
-        return df['close']
+        return df
 
-    def value(self, fin_products):
+    def load_securities(self, securities):
+
+        security_data = {}
+        for security in securities:
+            security_data[security] = self.load(security)
+        self.security_data = security_data
+
+
+    def value(self, fin_products, date):
         securities_value = 0
-        for product_name in fin_products.keys():
-            securities_value += self.security_data[product_name] * fin_products[product_name]
+        for ticker in fin_products.keys():
+            securities_value += self.security_data[ticker].loc[date,"close"] * fin_products[ticker]
         return securities_value
-
