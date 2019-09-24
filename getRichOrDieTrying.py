@@ -16,6 +16,9 @@ def main():
     #acquired_securities = user.create_order(buy, "Google", 1)
 
     #create a portfolio with securities
+    user1.define_trades()
+    print(user1.trade_list)
+
     acquired_securities = {"GOOGL": 2, "MSFT": 1}
 
     user1.portfolio.update_portfolio(acquired_securities)
