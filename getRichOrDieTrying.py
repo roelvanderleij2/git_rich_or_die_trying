@@ -1,6 +1,5 @@
 from getRichOrDieTrying.User import User
 from getRichOrDieTrying.Market import Market
-from getRichOrDieTrying.Portfolio import Portfolio
 
 
 def main():
@@ -9,22 +8,19 @@ def main():
     security_data = {"Apple": 239, "Shell": 100, "Google": 1200}
     market = Market(security_data)
 
+    print("Welcome to Git Rich Or Die Trying investment platform")
+    name = input("To open an account enter your Name:\n")
+    cash_deposit = int(input("How much cash would you like to deposit in your account?\n"))
+    user1 = User(name, cash_deposit)
+
+    #acquired_securities = user.create_order(buy, "Google", 1)
+
     #create a portfolio with securities
-    securities = {"Apple": 2, "Shell": 1}
+    acquired_securities = {"Apple": 2, "Shell": 1}
 
-    securities.keys()
-    portfolio = Portfolio(securities, 100000)
+    user1.portfolio.update_portfolio(acquired_securities)
+
     print("portfolio value")
-    print(portfolio.value(market))
-
-
-    name = input("What is your name?")
-    cash_deposit = input("How much cash would you like to deposit?")
-    user1 = User(name, int(cash_deposit))
-
-
-    print(user1.name)
-    print(user1.cash)
-
+    print(user1.portfolio.value(market))
 
 main()
