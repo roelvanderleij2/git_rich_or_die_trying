@@ -6,7 +6,6 @@ import datetime as dt
 def main():
 
     #Initialize market
-    security_data = {"Apple": 239, "Shell": 100, "Google": 1200}
     market = Market()
     market.load_securities(["GOOGL","MSFT"])
 
