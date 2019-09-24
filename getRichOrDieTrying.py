@@ -7,7 +7,6 @@ def main():
 
     #Initialize market
     market = Market()
-    market.load_securities(["GOOGL","MSFT"])
 
     print("Welcome to Git Rich Or Die Trying investment platform")
     name = input("To open an account enter your Name:\n")
@@ -21,7 +20,7 @@ def main():
 
     user1.portfolio.update_portfolio(acquired_securities)
 
-    print("portfolio value")
+    print("portfolio value:")
     print(user1.portfolio.value(market, dt.datetime(2019,9,23)))
 
 main()

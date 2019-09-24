@@ -1,10 +1,12 @@
 import requests
 import pandas as pd
 
+
 class Market:
     security_data = {}
+
     def __init__(self):
-       pass
+        pass
 
     def load(self, ticker):
         response = requests.get(
@@ -35,16 +37,10 @@ class Market:
 
         return df
 
-    def load_securities(self, securities):
+    def get_value(self, ticker, date):
 
-        security_data = {}
-        for security in securities:
-            security_data[security] = self.load(security)
-        self.security_data = security_data
+        # When the data of the requested security is not present yet, add it to the market object security_data
+        if not self.security_data.keys().__contains__(ticker):
+            self.security_data[ticker] = self.load(ticker)
 
-
-    def value(self, fin_products, date):
-        securities_value = 0
-        for ticker in fin_products.keys():
-            securities_value += self.security_data[ticker].loc[date,"close"] * fin_products[ticker]
-        return securities_value
+        return self.security_data[ticker].loc[date, "close"]

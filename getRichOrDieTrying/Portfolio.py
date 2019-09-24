@@ -26,7 +26,14 @@ class Portfolio:
                         self.fin_products[product] = product_mutations[product]
 
     def value(self, market, date):
-        securities_value = market.value(self.fin_products, date)
+
+        # Return the value of the securities in the fin_products dictionary on date
+        securities_value = 0
+
+        for ticker in self.fin_products.keys():
+            # Increment the return variable with the current security value
+            securities_value += market.get_value(ticker, date) * self.fin_products[ticker]
+
         return securities_value + self.cash_amount
 
     def show_value_hist(self, date_range):
