@@ -9,7 +9,7 @@ class Portfolio:
         print("update portfolio")
 
     def show_value(self):
-        market.Value(self.fin_products)
+        Market.value(self.fin_products)
         print("Show value")
 
     def show_value_hist(self, date_range):

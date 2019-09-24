@@ -1,4 +1,5 @@
 from getRichOrDieTrying import User
+from getRichOrDieTrying import Market
 
 
 def main():
