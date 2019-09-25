@@ -6,9 +6,7 @@ import datetime as dt
 def main():
 
     #Initialize market
-    security_data = {"Apple": 239, "Shell": 100, "Google": 1200}
     market = Market()
-    market.load_securities(["GOOGL","MSFT"])
 
     print("Welcome to Git Rich Or Die Trying investment platform")
     name = input("To open an account enter your Name:\n")
@@ -18,11 +16,14 @@ def main():
     #acquired_securities = user.create_order(buy, "Google", 1)
 
     #create a portfolio with securities
+    user1.define_trades()
+    print(user1.trade_list)
+
     acquired_securities = {"GOOGL": 2, "MSFT": 1}
 
     user1.portfolio.update_portfolio(acquired_securities)
 
-    print("portfolio value")
+    print("portfolio value:")
     print(user1.portfolio.value(market, dt.datetime(2019,9,23)))
 
 main()

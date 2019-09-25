@@ -1,6 +1,7 @@
 class Order:
-    def __init__(self, security_name, amount):
-        self.security_name = security_name
+    def __init__(self, ticker, order_type, amount):
+        self.ticker = ticker
+        self.order_type = order_type
         self.amount = amount
 
     def buy(self):
