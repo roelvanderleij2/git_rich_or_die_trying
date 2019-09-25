@@ -47,11 +47,7 @@ class Portfolio:
 
     def save_current_state_of_portfolio(self, date):
         portfolio_state = Portfolio(copy_dictionary(self.fin_products), self.cash_account.value())
-
-        if self.portfolio_history.keys().__contains__(date):
-            raise Exception("Intra day portfolio updates not supported yet")
-        else:
-            self.portfolio_history[date] = portfolio_state
+        self.portfolio_history[date] = portfolio_state
 
     def value(self, market, date):
         # Return the value of the securities in the fin_products dictionary on date

@@ -31,6 +31,7 @@ def main():
     print(user1.trade_list)
     user1.execute_trades(market, dt.datetime(2019, 9, 23))
 
+    print(user1.portfolio.cash_account.value())
     print(user1.portfolio.historical_performance(market))
 
 main()
