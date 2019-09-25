@@ -31,15 +31,19 @@ def main():
     # acquired_securities = user.create_order(buy, "Google", 1)
 
     # create a portfolio with securities
-    user1.define_trades()
-    print(user1.trade_list)
+    # user1.define_trades()
+    # print(user1.trade_list)
 
     acquired_securities = {"GOOGL": 2, "MSFT": 1}
 
-    user1.portfolio.update_portfolio(acquired_securities)
+    user1.portfolio.update_portfolio(acquired_securities, dt.datetime(2019, 9, 16))
+    user1.portfolio.update_portfolio(acquired_securities, dt.datetime(2019, 9, 17))
+    user1.portfolio.update_portfolio(acquired_securities, dt.datetime(2019, 9, 18))
+    user1.portfolio.update_portfolio(acquired_securities, dt.datetime(2019, 9, 19))
+    print(user1.portfolio.historical_performance(market))
 
     print("portfolio value:")
-    print(user1.portfolio.value(market, dt.datetime(2019, 9, 23)))
+    print(user1.portfolio.value(market, dt.datetime(2019, 9, 19)))
 
 
 main()

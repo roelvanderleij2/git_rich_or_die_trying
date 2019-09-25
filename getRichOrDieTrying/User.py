@@ -22,5 +22,3 @@ class User:
             continue_statement = input("Would you like to add another trade (True/False)?")
 
         self.trade_list.append(new_trades)
-
-   #def execute_trades(self, trade_list):
