@@ -1,29 +1,36 @@
 from getRichOrDieTrying.User import User
 from getRichOrDieTrying.Market import Market
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import datetime as dt
+from datetime import timedelta
 
 app = Flask(__name__)
 
 market = Market()
 user = User("TestUser", 0)
-start_date = dt.datetime(2019, 9, 16)
+current_date = dt.datetime(2019, 9, 16)
+
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
+
+    global current_date
     if request.method == "POST":
         if "execute_trades" in request.form:
-            user.execute_trades(market, start_date)
-            print("trades uitgevoerd")
-            return render_template("home.html", user_account=user, market=market, current_date=start_date)
+            user.execute_trades(market, current_date)
+            return redirect("home")
         elif "add_trade" in request.form:
-            return render_template("new_trade.html")
+            return redirect("new_trade")
+        elif "next_day" in request.form:
+
+            current_date = current_date + timedelta(days=1)
+            return redirect("home")
 
         cash = int(request.form["cash"])
         user.portfolio.cash_account.update_cash_account(cash)
-        return render_template("home.html", user_account=user, market=market, current_date=start_date)
+        return redirect("home")
     else:
-        return render_template("home.html", user_account=user, market=market, current_date=start_date)
+        return render_template("home.html", user_account=user, market=market, current_date=current_date)
 
 @app.route("/new_trade", methods=["GET", "POST"])
 # the user will ask for this web-page where the user should enter the variable
@@ -41,7 +48,7 @@ def new_trade():
         user.trade_list += new_trades
 
         print(stock_ticker)
-        return render_template("home.html", user_account=user, market=market, current_date=start_date)
+        return redirect("home")
     else:
         return render_template("new_trade.html", title="new_trade")
 
@@ -63,7 +70,7 @@ def main():
     user1.define_trades()
     user1.portfolio.cash_account.value()
 
-    user1.portfolio.value(market, start_date)
+    user1.portfolio.value(market, current_date)
     print(user1.trade_list)
     user1.execute_trades(market, dt.datetime(2019, 9, 23))
 
