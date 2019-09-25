@@ -2,8 +2,6 @@ from getRichOrDieTrying.User import User
 from getRichOrDieTrying.Market import Market
 from flask import Flask, render_template, request
 import datetime as dt
-from flask import Flask, render_template, request
-import getRichOrDieTrying.Order
 
 app = Flask(__name__)
 
