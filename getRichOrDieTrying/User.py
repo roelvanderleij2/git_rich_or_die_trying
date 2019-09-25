@@ -9,7 +9,6 @@ class User:
     def __init__(self, name, start_cash):
         self.name = name
         self.portfolio = Portfolio(None, start_cash)
-        self.cash_account = CashAccount(start_cash)
 
     def name(self):
         return self.name
@@ -27,10 +26,27 @@ class User:
 
         self.trade_list += new_trades
 
+    def execute_single_order(self, row):
+        if row['Order Type'] == 'Buy':
+
+            self.portfolio.update_portfolio({row['Ticker']: int(row['Amount'])},row['Date'])
+            self.portfolio.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
+
+        elif row['Order Type'] == 'Sell':
+
+            if not self.portfolio.fin_products.keys().__contains__(row['Ticker']):
+                print("You do not have this instrument in your portfolio")
+                return
+            elif self.portfolio.fin_products[row['Ticker']] >= row['Amount']:
+                self.portfolio.update_portfolio({row['Ticker']: -1 * int(row['Amount'])}, row['Date'])
+                self.portfolio.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
+            else:
+                print("You do not have enough stock in your portfolio to execute the sell order")
+
     def execute_trades(self, market, date):
         proceed_order = input("Are you sure you would like to execute these trades (Yes/No)?\n")
         if proceed_order == 'Yes':
-            column_names = ['Ticker', 'Market Value', 'Order Type', 'Amount']
+            column_names = ['Ticker', 'Market Value', 'Order Type', 'Amount', 'Date']
             df = pd.DataFrame(columns=column_names)
             #df.set_index('Ticker')
 
@@ -38,37 +54,22 @@ class User:
                 order_list = []
                 if order['Order Type'] == 'Buy':
                     order_list = [order['Ticker'], market.get_value(order['Ticker'], date), order['Order Type'],
-                                  order['Amount']]
+                                  order['Amount'], date]
                 elif order['Order Type'] == 'Sell':
                     order_list = [order['Ticker'], -1 * market.get_value(order['Ticker'], date), order['Order Type'],
-                                  order['Amount']]
+                                  order['Amount'], date]
 
                 row = pd.Series(order_list, column_names)
                 df = df.append(row, ignore_index=True)
             print(df.head())
                 # Check if you have enough cash in your cash account to execute the order.
-            if self.cash_account.value() > df['Market Value'].sum():
+            if self.portfolio.cash_account.value() > df['Market Value'].sum():
 
-                for row in df.iterrows():
-                    if row['Order Type'] == 'Buy':
-
-                        self.portfolio.update_portfolio({row['Ticker'], int(row['Amount'])})
-                        self.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
-                        print("Bought" + row['Amount'] + "stock of" + row['Ticker'] + "and added to your portfolio.")
-
-                    elif row['Order Type'] == 'Sell':
-                        if not self.portfolio.fin_products.keys().__contains__(row['Ticker']):
-                            print("You do not have this instrument in your portfolio")
-                            return
-                        elif self.portfolio.fin_products[row['Ticker']] >= row['Amount']:
-                                self.portfolio.update_portfolio({row['Ticker'], -1 * int(row['Amount'])})
-                                self.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
-                                print("Sold" + row['Amount'] + "stock of" + row['Ticker'] + "and removed from your portfolio.")
-                        else:
-                            print("You do not have enough stock in your portfolio to execute the sell order")
+                df.apply(self.execute_single_order, axis=1)
 
             else:
                 print("You do not have enough cash in your account to execute this order. No trades executed.")
 
         else:
             print("No trades executed.")
+

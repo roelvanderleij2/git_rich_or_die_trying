@@ -7,4 +7,3 @@ class CashAccount:
 
     def update_cash_account(self, amount):
         self.cash_position += amount
-        print("Your current cash position is" + self.cash_position + ".")
