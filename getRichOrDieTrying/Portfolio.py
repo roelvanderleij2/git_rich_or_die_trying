@@ -53,6 +53,9 @@ class Portfolio:
         # Return the value of the securities in the fin_products dictionary on date
         securities_value = 0
 
+        if self.fin_products is None:
+            return self.cash_account.value()
+
         for ticker in self.fin_products.keys():
             # Increment the return variable with the current security value
             securities_value += market.get_value(ticker, date) * self.fin_products[ticker]
