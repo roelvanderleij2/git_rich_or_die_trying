@@ -47,7 +47,7 @@ class User:
                 print("You do not have enough stock in your portfolio to execute the sell order")
 
     def execute_trades(self, market, date):
-        proceed_order = input("Are you sure you would like to execute these trades (Yes/No)?\n")
+        proceed_order = 'Yes' #input("Are you sure you would like to execute these trades (Yes/No)?\n")
         if proceed_order == 'Yes':
             column_names = ['Ticker', 'Market Value', 'Order Type', 'Amount', 'Date']
             df = pd.DataFrame(columns=column_names)
