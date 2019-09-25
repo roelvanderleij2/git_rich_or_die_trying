@@ -18,12 +18,13 @@ def main():
     #create a portfolio with securities
     user1.define_trades()
     print(user1.trade_list)
+    user1.execute_trades(market, dt.datetime(2019,9,24))
 
-    acquired_securities = {"GOOGL": 2, "MSFT": 1}
+    #acquired_securities = {"GOOGL": 2, "MSFT": 1}
 
-    user1.portfolio.update_portfolio(acquired_securities)
+    #user1.portfolio.update_portfolio(acquired_securities)
 
-    print("portfolio value:")
-    print(user1.portfolio.value(market, dt.datetime(2019,9,23)))
+    #print("portfolio value:")
+    #print(user1.portfolio.value(market, dt.datetime(2019,9,24)))
 
 main()
