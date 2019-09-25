@@ -1,5 +1,6 @@
 from getRichOrDieTrying.CashAccount import CashAccount
 from getRichOrDieTrying.Utilities import copy_dictionary
+from datetime import datetime, date, timedelta
 
 class Portfolio:
     portfolio_history = {}
@@ -8,7 +9,7 @@ class Portfolio:
         self.fin_products = fin_products
         self.cash_account = CashAccount(cash_amount)
 
-    def update_portfolio(self, product_mutations, date):
+    def update_portfolio(self, product_mutations, price, date):
         # fin_products must be a dictionary with product name and plus or minus amount
 
         # when there is no portfolio yet,
@@ -30,7 +31,19 @@ class Portfolio:
                     if product_mutations[product] >= 0:
                         self.fin_products[product] = product_mutations[product]
 
+        self.cash_account.update_cash_account(price)
         self.save_current_state_of_portfolio(date)
+
+    def get_last_portfolio_state(self, date):
+        if self.portfolio_history.keys().__contains__(date):
+            return self.portfolio_history[date]
+        else:
+            date = date - timedelta(days=1)
+
+            if min(self.portfolio_history.keys()) <= date:
+                return self.get_last_portfolio_state(date)
+            else:
+                raise Exception("no portfolio history available")
 
     def save_current_state_of_portfolio(self, date):
         portfolio_state = Portfolio(copy_dictionary(self.fin_products), self.cash_account.value())
@@ -54,8 +67,15 @@ class Portfolio:
 
         historical_portfolio_values = {}
 
-        for date in self.portfolio_history.keys():
-            historical_portfolio_values[date] = self.portfolio_history[date].value(market, date)
+        initial_date = min(self.portfolio_history.keys())
+        last_date = datetime.now() - timedelta(days=1)
+        delta = last_date - initial_date
+
+        for i in range(delta.days + 1):
+            day = initial_date + timedelta(days=i)
+
+            day_value = self.get_last_portfolio_state(day).value(market, day)
+
+            historical_portfolio_values[day] = day_value
 
         return historical_portfolio_values
-

@@ -29,8 +29,9 @@ class User:
     def execute_single_order(self, row):
         if row['Order Type'] == 'Buy':
 
-            self.portfolio.update_portfolio({row['Ticker']: int(row['Amount'])},row['Date'])
-            self.portfolio.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
+            costs = -1 * row['Market Value'] * int(row['Amount'])
+
+            self.portfolio.update_portfolio({row['Ticker']: int(row['Amount'])}, costs, row['Date'])
 
         elif row['Order Type'] == 'Sell':
 
@@ -38,8 +39,10 @@ class User:
                 print("You do not have this instrument in your portfolio")
                 return
             elif self.portfolio.fin_products[row['Ticker']] >= row['Amount']:
-                self.portfolio.update_portfolio({row['Ticker']: -1 * int(row['Amount'])}, row['Date'])
-                self.portfolio.cash_account.update_cash_account(-1 * row['Market Value'] * int(row['Amount']))
+
+                profit = -1 * row['Market Value'] * int(row['Amount'])
+
+                self.portfolio.update_portfolio({row['Ticker']: -1 * int(row['Amount'])}, profit, row['Date'])
             else:
                 print("You do not have enough stock in your portfolio to execute the sell order")
 
@@ -61,8 +64,8 @@ class User:
 
                 row = pd.Series(order_list, column_names)
                 df = df.append(row, ignore_index=True)
-            print(df.head())
-                # Check if you have enough cash in your cash account to execute the order.
+
+            # Check if you have enough cash in your cash account to execute the order.
             if self.portfolio.cash_account.value() > df['Market Value'].sum():
 
                 df.apply(self.execute_single_order, axis=1)
@@ -73,3 +76,4 @@ class User:
         else:
             print("No trades executed.")
 
+        self.trade_list = []
