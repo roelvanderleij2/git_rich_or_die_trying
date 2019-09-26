@@ -1,5 +1,7 @@
 {% extends "layout.html"%}
 {% block content %}
+<fieldset class="form-group">
+    <legend class="border-bottom mb-4">New Trade</legend>
         <form method="POST">
             <b><label for="list-1">Stock</label></b>
             <select name="stock">
@@ -29,7 +31,6 @@
                 <option value="MT">ArcelorMittal</option>
                 <option value="LLY">Eli Lilly and Company</option>
                 <option value="AGN">Allergan plc</option>
-
             </select>
             <br>
             <b>Amount:</b>
@@ -47,3 +48,4 @@
             <button type="submit">Submit!</button>
         </form>
 {% endblock content %}
+

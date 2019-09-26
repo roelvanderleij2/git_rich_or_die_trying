@@ -21,7 +21,7 @@
     current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
     <br><br>
     <h2>Pending trades</h2>
-    {{user_account.trade_list}}
+       {{user_account.trade_list}}
     <br>
     <form method="post">
         <p><button type="submit" name="add_trade"/>Add trades</p>
