@@ -32,7 +32,7 @@ There is {{user_account.portfolio.cash_account.value()}} euro in your account
     {{user_account.portfolio.fin_products}} <br>
     <h2>Portfolio value:</h2>
 
-    current value securities: {{user_account.portfolio.value(market,current_date) - user_account.portfolio.cash_account.value()}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date)}}
+    current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
 
     <br>
     <br>
