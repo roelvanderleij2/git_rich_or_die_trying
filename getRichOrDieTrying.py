@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = "'4b2b8db36837b69b8b875cac6e5df558'"
 market = Market()
 user_account = User_Account("TestUser", 0)
 current_date = dt.datetime(2019, 9, 16)
-hist_performance_start_date = dt.datetime(2018, 9, 3)
+hist_performance_start_date = dt.datetime(2018, 9, 4)
 
 
 @app.route("/home", methods=["GET", "POST"])
