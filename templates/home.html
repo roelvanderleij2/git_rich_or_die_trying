@@ -21,19 +21,43 @@
     current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
     <br><br>
     <h2>Pending trades</h2>
-       {{user_account.trade_list}}
-    <br>
-    <form method="post">
-        <p><button type="submit" name="add_trade"/>Add trades</p>
-    </form>
-    <br><br>
-    <form method="post">
-        <p><button type="submit" name="execute_trades"/>Execute trades</p>
-    </form>
-    <form method="post">
-        <p><button type="submit" name="current_date">Last available date</button></p>
-    </form>
-    <form method="post">
-        <p><button type="submit" name="next_day"/>Next day</button></p>
-    </form>
+
+<style>
+    table, th, td {
+    border: 1.5px solid green;
+       }
+</style>
+
+    <table>
+         <tr><td>Action</td><td>Symbol</td><td>Amount</td></tr>
+         {% for trade in user_account.trade_list %}
+         <tr>
+             <td>{{trade['Order Type']}}</td>
+             <td>{{trade.Ticker}}</td>
+             <td>{{trade.Amount}}</td>
+         </tr>
+            {% endfor %}
+     </table>
+    <table>
+        <tr>
+            <form method="post">
+                <p><button type="submit" name="add_trade"/>Add trades</p>
+            </form>
+        </tr>
+        <tr>
+            <form method="post">
+                <p><button type="submit" name="execute_trades"/>Execute trades</p>
+            </form>
+        </tr>
+        <tr>
+            <form method="post">
+                <p><button type="submit" name="current_date">Last available date</button></p>
+            </form>
+        </tr>
+        <tr>
+            <form method="post">
+                <p><button type="submit" name="next_day"/>Next day</button></p>
+            </form>
+        </tr>
+    </table>
 {% endblock content%}
