@@ -1,9 +1,11 @@
 from getRichOrDieTrying.User import User
 from getRichOrDieTrying.Market import Market
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+from forms import RegistrationForm, LoginForm
 import datetime as dt
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "'4b2b8db36837b69b8b875cac6e5df558'"
 
 market = Market()
 user = User("TestUser", 0)
@@ -43,9 +45,24 @@ def new_trade():
         user.trade_list += new_trades
 
         print(stock_ticker)
-        return redirect("home")
+        return redirect(url_for('home'))
     else:
         return render_template("new_trade.html", title="new_trade")
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created successfully for {form.username.data}!', 'success')
+        return redirect(url_for('home'))
+    return render_template("register.html", title="register", form=form)
+
+
+@app.route("/login")
+def login():
+    form = LoginForm()
+    return render_template("login.html", title='login', form=form)
 
 
 if __name__ == "__main__":
