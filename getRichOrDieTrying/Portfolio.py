@@ -10,6 +10,9 @@ class Portfolio:
         self.fin_products = fin_products
         self.cash_account = CashAccount(cash_amount)
 
+    def cash_value(self):
+        return self.cash_account.value()
+
     def update_portfolio(self, product_mutations, price, date):
         # fin_products must be a dictionary with product name and plus or minus amount
 
@@ -71,19 +74,16 @@ class Portfolio:
         initial_date = min(self.portfolio_history.keys())
         last_date = datetime.now() - timedelta(days=1)
 
-        #delta = last_date - initial_date
-
-        #for i in range(delta.days + 1):
-            # day = initial_date + timedelta(days=i)
-            #
-            # day_value = self.get_last_portfolio_state(day).value(market, day)
-            #
-            # historical_portfolio_values[day] = day_value
-
-        for day in pd.bdate_range(initial_date, last_date):
-
-            day_value = self.get_last_portfolio_state(day).value(market, day)
-
-            historical_portfolio_values[day] = day_value
+        for day in pd.bdate_range(start=initial_date, end=last_date):
+            try:
+                day_value = self.get_last_portfolio_state(day).value(market, day)
+                historical_portfolio_values[day] = day_value
+            except:
+                continue
 
         return historical_portfolio_values
+
+    def abs_profit_loss(self, market, start_date, view_date):
+        start_value = self.value(market, start_date)
+        view_value = self.value(market, view_date)
+        return "{0:,.2f}".format(view_value - start_value)
