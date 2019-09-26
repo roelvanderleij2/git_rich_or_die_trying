@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% if title %}
-        <title>Get Rich or Die Trying - {{ title }}</title>
-    {% else %}
-    <title>Get Rich or Die Trying</title>
-    {% endif %}
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
  <h2>Your asked to {{type_order}} {{num_squrities}} of {{stock_ticker}}</h2>
-</body>
-</html>
+{% endblock content %}

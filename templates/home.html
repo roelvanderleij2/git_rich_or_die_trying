@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% if title %}
-        <title>Get Rich or Die Trying - {{ title }}</title>
-    {% else %}
-    <title>Get Rich or Die Trying</title>
-    {% endif %}
+{% extends "layout.html" %}
+{% block content %}
+    <br><br><br>
     <h1>Get Rich or Die Trying Trading platform</h1>
     <h2>Welcome {{user_account.name}},                 Today is {{current_date}}</h2>
     There is {{user_account.portfolio.cash_account.value()}} euro in your account
-    <br>
-    <br>
+    <br><br>
     <form method="post">
         <p><input type="number" name="cash" /></p>
     </form>
@@ -21,29 +14,15 @@
     <br>
     <h2>Portfolio value:</h2>
     {{user_account.portfolio.value(market,current_date)}}
-    <br>
-    <br>
-
+    <br><br>
     <h2>Pending trades</h2>
     {{user_account.trade_list}}
-
     <br>
-
     <form method="post">
         <p><button type="submit" name="add_trade"/>Add trades</p>
     </form>
-
-    <br>
-
-
-    <br>
-
+    <br><br>
     <form method="post">
         <p><button type="submit" name="execute_trades"/>Execute trades</p>
     </form>
-
-</head>
-<body>
-
-</body>
-</html>
+{% endblock content%}
