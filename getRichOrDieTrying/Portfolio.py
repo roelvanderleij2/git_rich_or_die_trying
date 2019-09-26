@@ -4,11 +4,11 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 
 class Portfolio:
-    portfolio_history = {}
 
     def __init__(self, fin_products, cash_amount):
         self.fin_products = fin_products
         self.cash_account = CashAccount(cash_amount)
+        self.portfolio_history = {}
 
     def cash_value(self):
         return self.cash_account.value()
