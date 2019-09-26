@@ -87,3 +87,8 @@ class Portfolio:
         start_value = self.value(market, start_date)
         view_value = self.value(market, view_date)
         return "{0:,.2f}".format(view_value - start_value)
+
+    def rel_profit_loss(self, market, start_date, view_date):
+        start_value = self.value(market, start_date)
+        view_value = self.value(market, view_date)
+        return "{:.2%}".format((view_value - start_value)/start_value)

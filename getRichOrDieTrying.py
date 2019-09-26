@@ -82,9 +82,11 @@ def main():
     cash_amount = user_account.cash_amount()
     portfolio_value = user_account.portfolio_value(market, start_date)
     abs_profit_loss = user_account.abs_profit_loss_value(market, start_date, view_date)
+    rel_profit_loss = user_account.rel_profit_loss_value(market, start_date, view_date)
     print("Your cash position is:", cash_amount, ".")
     print("Your portfolio value is:", portfolio_value, ".")
     print("Your profit/loss is:", abs_profit_loss, ".")
+    print("Your profit/loss percentage is:", rel_profit_loss, ".")
 
     df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market), orient='index', columns=['Portfolio Value'])
     plot_performance(df, 'Historical Portfolio Performance', 'Date Range', 'Portfolio Value')
