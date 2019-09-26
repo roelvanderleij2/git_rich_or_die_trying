@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from datetime import timedelta
 from getRichOrDieTrying.Utilities import plot_performance
 import time
+
 plt.style.use('ggplot')
 
 app = Flask(__name__)
@@ -21,10 +22,8 @@ current_date = dt.datetime(2019, 9, 16)
 hist_performance_start_date = dt.datetime(2018, 9, 3)
 
 
-
 @app.route("/home", methods=["GET", "POST"])
 def home():
-
     global current_date
     if request.method == "POST":
         if "execute_trades" in request.form:
@@ -44,7 +43,6 @@ def home():
             current_date = dt.datetime(now.year, now.month, now.day) - timedelta(days=1)
             return redirect("home")
 
-
         cash = int(request.form["cash"])
         user_account.portfolio.cash_account.update_cash_account(cash)
         return redirect("home")
@@ -58,7 +56,8 @@ def hist_performance(stock_ticker):
     tempUser.trade_list = [{'Ticker': stock_ticker, 'Order Type': "Buy", 'Amount': 1}]
     tempUser.execute_trades(market, hist_performance_start_date)
     fig, ax = plt.subplots()
-    df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market, current_date), orient='index', columns=['Portfolio Value'])
+    df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market, current_date), orient='index',
+                                columns=['Portfolio Value'])
     df['Portfolio Value'].plot()
     print("remove fig")
     file_path = "static/img.png"
@@ -66,11 +65,13 @@ def hist_performance(stock_ticker):
         os.remove(file_path)
     fig.savefig(file_path)
 
+
 def hist_performance_portfolio_plot(user_account, market, current_date):
-    df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market, current_date), orient='index', columns=['Portfolio Value'])
+    df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market, current_date), orient='index',
+                                columns=['Portfolio Value'])
     fig = plot_performance(df, 'Historical Portfolio Performance', 'Date Range', 'Portfolio Value')
 
-    file_path = "static/portfolio.png"
+    file_path = "static/img.png"
     if os.path.exists(file_path):
         os.remove(file_path)
     fig.savefig(file_path)
@@ -145,7 +146,7 @@ def main():
     print(user1.portfolio.cash_account.value())
     print(user1.portfolio.historical_performance(market))
 
-    #create a portfolio with securities
+    # create a portfolio with securities
     user_account.define_trades()
     user_account.execute_trades(market, start_date)
 
@@ -158,7 +159,8 @@ def main():
     print("Your profit/loss is:", abs_profit_loss, ".")
     print("Your profit/loss percentage is:", rel_profit_loss, ".")
 
-    df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market), orient='index', columns=['Portfolio Value'])
+    df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market), orient='index',
+                                columns=['Portfolio Value'])
     plot_performance(df, 'Historical Portfolio Performance', 'Date Range', 'Portfolio Value')
     plt.show()
 
