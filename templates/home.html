@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     {% if title %}
@@ -33,28 +33,42 @@ There is {{user_account.portfolio.cash_account.value()}} euro in your account
     <h2>Portfolio value:</h2>
 
     current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
-
     <br>
     <br>
 
     <h2>Pending trades</h2>
-    {{user_account.trade_list}}
-
+<style>
+    table, th, td {
+      border: 1px solid black;
+}
+</style>
+ <table>
+     <tr><td>Action</td><td>Symbol</td><td>Amount</td></tr>
+     {% for trade in user_account.trade_list %}
+     <tr>
+         <td>{{trade['Order Type']}}</td>
+         <td>{{trade.Ticker}}</td>
+         <td>{{trade.Amount}}</td>
+    </tr>
+        {% endfor %}
+     </table>
     <br>
     <form method="post">
-        <p><button type="submit" name="add_trade"/>Add trades</p>
+        <p><button type="submit" name="add_trade"/>Add trades</button</p>
     </form>
-    <br>
-    <br>
-
+    <br><br>
     <form method="post">
         <p><button type="submit" name="execute_trades"/>Execute trades</p>
     </form>
     <form method="post">
-        <p><button type="submit" name="next_day"/>Next day</p>
+        <p><button type="submit" name="current_date">Today</button></p>
+    </form>
+    <form method="post">
+        <p><button type="submit" name="next_day"/>Next day</button></p>
     </form>
 
     <HR>
+    <br>
     <img src="https://townsquare.media/site/812/files/2015/02/50-cent-get-rich-die-tryin.jpg?w=980&q=75" />
 </body>
 </html>

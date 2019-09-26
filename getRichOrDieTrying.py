@@ -36,6 +36,10 @@ def home():
             elif dt.datetime.weekday(current_date) == 6:
                 current_date = current_date + timedelta(days=1)
             return redirect("home")
+        elif "today" in request.form:
+            current_date = dt.datetime.now()
+            return redirect("home")
+
 
         cash = int(request.form["cash"])
         user.portfolio.cash_account.update_cash_account(cash)
