@@ -2,3 +2,4 @@ wtforms
 flask
 requests
 pandas
+matplotlib

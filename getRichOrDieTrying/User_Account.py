@@ -3,12 +3,24 @@ from .CashAccount import CashAccount
 import pandas as pd
 import numpy as np
 
-class User:
+class User_Account:
     trade_list = []
 
     def __init__(self, name, start_cash):
         self.name = name
         self.portfolio = Portfolio(None, start_cash)
+
+    def cash_amount(self):
+        return self.portfolio.cash_value()
+
+    def portfolio_value(self, market, date):
+        return self.portfolio.value(market, date)
+
+    def abs_profit_loss_value(self, market, start_date, view_date):
+        return self.portfolio.abs_profit_loss(market, start_date, view_date)
+
+    def rel_profit_loss_value(self, market, start_date, view_date):
+        return self.portfolio.rel_profit_loss(market, start_date, view_date)
 
     def name(self):
         return self.name
