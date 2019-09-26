@@ -15,7 +15,7 @@ app = Flask(__name__)
 market = Market()
 user_account = User_Account("TestUser", 0)
 current_date = dt.datetime(2019, 9, 16)
-hist_performance_start_date = dt.datetime(2018, 9, 3)
+hist_performance_start_date = dt.datetime(2018, 9, 4)
 
 
 @app.route("/home", methods=["GET", "POST"])
@@ -53,10 +53,9 @@ def hist_performance(stock_ticker):
     tempUser = User_Account("Temp", 100000000)
     tempUser.trade_list = [{'Ticker': stock_ticker, 'Order Type': "Buy", 'Amount': 1}]
     tempUser.execute_trades(market, hist_performance_start_date)
-    fig, ax = plt.subplots()
     df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market, current_date), orient='index', columns=['Portfolio Value'])
-    df['Portfolio Value'].plot()
-    print("remove fig")
+    fig = plot_performance(df, 'Historical Portfolio Performance', 'Date Range', 'Stock Value')
+
     file_path = "static/img.png"
     if os.path.exists(file_path):
         os.remove(file_path)
@@ -81,7 +80,6 @@ def new_trade():
 
         if "check_perfomance" in request.form:
             hist_performance(stock_ticker)
-            time.sleep(5)
             return render_template("new_trade.html", title="new_trade", stock_ticker=stock_ticker)
 
         # get the form data from the user

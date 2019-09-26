@@ -4,9 +4,9 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 
 class Portfolio:
-    portfolio_history = {}
 
     def __init__(self, fin_products, cash_amount):
+        self.portfolio_history = {}
         self.fin_products = fin_products
         self.cash_account = CashAccount(cash_amount)
 
@@ -87,12 +87,20 @@ class Portfolio:
 
         return historical_portfolio_values
 
-    def abs_profit_loss(self, market, start_date, view_date):
-        start_value = self.value(market, start_date)
-        view_value = self.value(market, view_date)
-        return "{0:,.2f}".format(view_value - start_value)
+    def abs_profit_loss(self, market, current_date):
+        if self.portfolio_history.__len__() == 0:
+            return "{0:,.2f}".format(0)
 
-    def rel_profit_loss(self, market, start_date, view_date):
-        start_value = self.value(market, start_date)
-        view_value = self.value(market, view_date)
-        return "{:.2%}".format((view_value - start_value)/start_value)
+        initial_date = min(self.portfolio_history.keys())
+        start_value = self.value(market, initial_date)
+        current_value = self.value(market, current_date)
+        return "{0:,.2f}".format(current_value - start_value)
+
+    def rel_profit_loss(self, market, current_date):
+        if self.portfolio_history.__len__() == 0:
+            return "{0:,.2f}".format(0)
+
+        initial_date = min(self.portfolio_history.keys())
+        start_value = self.value(market, initial_date)
+        current_value = self.value(market, current_date)
+        return "{:.2%}".format((current_value - start_value)/start_value)

@@ -36,8 +36,10 @@ There is {{user_account.portfolio.cash_account.value()}} euro in your account
     <img src="/static/portfolio.png">
 
     <br>
-
-    current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
+    <br>
+    Current Value Securities: {{user_account.portfolio.value(market,current_date)}}, Cash:  {{user_account.portfolio.cash_account.value()}}, Total Value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
+    <br>
+    Profit/Loss (absolute): {{user_account.abs_profit_loss_value(market,current_date)}}, Profit/Loss (relative): {{user_account.rel_profit_loss_value(market,current_date)}}
     <br>
     <br>
 

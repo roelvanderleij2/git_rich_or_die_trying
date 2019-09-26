@@ -16,11 +16,11 @@ class User_Account:
     def portfolio_value(self, market, date):
         return self.portfolio.value(market, date)
 
-    def abs_profit_loss_value(self, market, start_date, view_date):
-        return self.portfolio.abs_profit_loss(market, start_date, view_date)
+    def abs_profit_loss_value(self, market, start_date):
+        return self.portfolio.abs_profit_loss(market, start_date)
 
-    def rel_profit_loss_value(self, market, start_date, view_date):
-        return self.portfolio.rel_profit_loss(market, start_date, view_date)
+    def rel_profit_loss_value(self, market, start_date):
+        return self.portfolio.rel_profit_loss(market, start_date)
 
     def name(self):
         return self.name
