@@ -53,9 +53,25 @@
                 <option value="limit-Order">limit-Order</option>
             </select>
             <br>
-            <b>Press GO! when you are ready</b>
+            <br>
+            <b>Press Submit! to add trades to your trade list, or check the performance </b> <br>
             <button type="submit">Submit!</button>
+            <button type="submit", name="check_perfomance">Check perfomance</button>
         </form>
+
+    <HR>
+    <h2>Historical perfomance</h2>
+
+    {% if stock_ticker %}
+        {{stock_ticker}} performance
+
+        <br>
+
+    <img src="/static/img.png">
+
+
+    {% endif %}
+
     </body>
 </html>
 

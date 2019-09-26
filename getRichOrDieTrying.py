@@ -1,16 +1,21 @@
 from getRichOrDieTrying.User import User
 from getRichOrDieTrying.Market import Market
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 import datetime as dt
 import pandas as pd
+from io import BytesIO
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 from datetime import timedelta
+plt.style.use('ggplot')
 
 app = Flask(__name__)
 
 market = Market()
 user = User("TestUser", 0)
 current_date = dt.datetime(2019, 9, 16)
+hist_performance_start_date = dt.datetime(2019, 9, 9)
 
 
 @app.route("/home", methods=["GET", "POST"])
@@ -38,25 +43,46 @@ def home():
     else:
         return render_template("home.html", user_account=user, market=market, current_date=current_date)
 
+
+def hist_performance(stock_ticker):
+    tempUser = User("Temp", 100000000)
+    tempUser.trade_list = [{'Ticker': stock_ticker, 'Order Type': "Buy", 'Amount': 1}]
+    tempUser.execute_trades(market, hist_performance_start_date)
+    fig, ax = plt.subplots()
+    df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market), orient='index', columns=['Market Value'])
+    df['Market Value'].plot()
+    fig.savefig("static/img.png")
+
+
+
+
+
+
 @app.route("/new_trade", methods=["GET", "POST"])
 # the user will ask for this web-page where the user should enter the variable
 # username and id_number
 def new_trade():
     if request.method == "POST":
+
+        stock_ticker = request.form['stock']
+
+        if "check_perfomance" in request.form:
+            hist_performance(stock_ticker)
+            return render_template("new_trade.html", title="new_trade", stock_ticker=stock_ticker)
+
         # get the form data from the user
         num_sequrities = request.form["number"]
         type_order = request.form['type']
-        stock_ticker = request.form['stock']
 
         new_trades = []
         trade = {'Ticker': stock_ticker, 'Order Type': type_order, 'Amount': int(num_sequrities)}
         new_trades.append(dict(trade))
         user.trade_list += new_trades
 
-        print(stock_ticker)
         return redirect("home")
     else:
-        return render_template("new_trade.html", title="new_trade")
+        stock_ticker = None
+        return render_template("new_trade.html", title="new_trade", stock_ticker=None)
 
 
 if __name__ == "__main__":
