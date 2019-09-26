@@ -3,22 +3,19 @@ from getRichOrDieTrying.Market import Market
 from flask import Flask, render_template, request, redirect, send_file
 import datetime as dt
 import pandas as pd
-from io import BytesIO
+import os
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 from datetime import timedelta
 from getRichOrDieTrying.Utilities import plot_performance
-
-
+import time
 plt.style.use('ggplot')
 
 app = Flask(__name__)
 
 market = Market()
-user = User_Account("TestUser", 0)
+user_account = User_Account("TestUser", 0)
 current_date = dt.datetime(2019, 9, 16)
-hist_performance_start_date = dt.datetime(2019, 9, 9)
+hist_performance_start_date = dt.datetime(2018, 9, 3)
 
 
 @app.route("/home", methods=["GET", "POST"])
@@ -27,7 +24,7 @@ def home():
     global current_date
     if request.method == "POST":
         if "execute_trades" in request.form:
-            user.execute_trades(market, current_date)
+            user_account.execute_trades(market, current_date)
             return redirect("home")
         elif "add_trade" in request.form:
             return redirect("new_trade")
@@ -39,16 +36,17 @@ def home():
             elif dt.datetime.weekday(current_date) == 6:
                 current_date = current_date + timedelta(days=1)
             return redirect("home")
-        elif "today" in request.form:
-            current_date = dt.datetime.now()
+        elif "current_date" in request.form:
+            now = dt.datetime.now()
+            current_date = dt.datetime(now.year, now.month, now.day) - timedelta(days=1)
             return redirect("home")
 
-
         cash = int(request.form["cash"])
-        user.portfolio.cash_account.update_cash_account(cash)
+        user_account.portfolio.cash_account.update_cash_account(cash)
         return redirect("home")
     else:
-        return render_template("home.html", user_account=user, market=market, current_date=current_date)
+        hist_performance_portfolio_plot(user_account, market, current_date)
+        return render_template("home.html", user_account=user_account, market=market, current_date=current_date)
 
 
 def hist_performance(stock_ticker):
@@ -56,11 +54,22 @@ def hist_performance(stock_ticker):
     tempUser.trade_list = [{'Ticker': stock_ticker, 'Order Type': "Buy", 'Amount': 1}]
     tempUser.execute_trades(market, hist_performance_start_date)
     fig, ax = plt.subplots()
-    df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market), orient='index', columns=['Market Value'])
-    df['Market Value'].plot()
-    fig.savefig("static/img.png")
+    df = pd.DataFrame.from_dict(tempUser.portfolio.historical_performance(market, current_date), orient='index', columns=['Portfolio Value'])
+    df['Portfolio Value'].plot()
+    print("remove fig")
+    file_path = "static/img.png"
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    fig.savefig(file_path)
 
+def hist_performance_portfolio_plot(user_account, market, current_date):
+    df = pd.DataFrame.from_dict(user_account.portfolio.historical_performance(market, current_date), orient='index', columns=['Portfolio Value'])
+    fig = plot_performance(df, 'Historical Portfolio Performance', 'Date Range', 'Portfolio Value')
 
+    file_path = "static/portfolio.png"
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    fig.savefig(file_path)
 
 @app.route("/new_trade", methods=["GET", "POST"])
 # the user will ask for this web-page where the user should enter the variable
@@ -72,6 +81,7 @@ def new_trade():
 
         if "check_perfomance" in request.form:
             hist_performance(stock_ticker)
+            time.sleep(5)
             return render_template("new_trade.html", title="new_trade", stock_ticker=stock_ticker)
 
         # get the form data from the user
@@ -81,7 +91,7 @@ def new_trade():
         new_trades = []
         trade = {'Ticker': stock_ticker, 'Order Type': type_order, 'Amount': int(num_sequrities)}
         new_trades.append(dict(trade))
-        user.trade_list += new_trades
+        user_account.trade_list += new_trades
 
         return redirect("home")
     else:

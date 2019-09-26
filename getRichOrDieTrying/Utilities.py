@@ -15,3 +15,4 @@ def plot_performance(df, str_title, str_xaxis, str_yaxis):
     plt.xlabel(str_xaxis, fontsize=12)
     plt.ylabel(str_yaxis, fontsize=12)
     plt.xticks(rotation=45)
+    return fig

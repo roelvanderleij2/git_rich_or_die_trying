@@ -67,12 +67,16 @@ class Portfolio:
         #return securities_value + self.cash_account.value()
         return securities_value
 
-    def historical_performance(self, market):
+    def historical_performance(self, market, current_date):
 
         historical_portfolio_values = {}
 
+        if self.portfolio_history.__len__() == 0:
+            return historical_portfolio_values
+
         initial_date = min(self.portfolio_history.keys())
-        last_date = datetime.now() - timedelta(days=1)
+
+        last_date = current_date
 
         for day in pd.bdate_range(start=initial_date, end=last_date):
             try:

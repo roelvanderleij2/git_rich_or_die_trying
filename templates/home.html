@@ -31,6 +31,11 @@ There is {{user_account.portfolio.cash_account.value()}} euro in your account
     <h2>Securities:</h2>
     {{user_account.portfolio.fin_products}} <br>
     <h2>Portfolio value:</h2>
+    <br>
+
+    <img src="/static/portfolio.png">
+
+    <br>
 
     current value securities: {{user_account.portfolio.value(market,current_date)}}, cash:  {{user_account.portfolio.cash_account.value()}}, total value: {{user_account.portfolio.value(market,current_date) + user_account.portfolio.cash_account.value()}}
     <br>
@@ -61,7 +66,7 @@ There is {{user_account.portfolio.cash_account.value()}} euro in your account
         <p><button type="submit" name="execute_trades"/>Execute trades</p>
     </form>
     <form method="post">
-        <p><button type="submit" name="current_date">Today</button></p>
+        <p><button type="submit" name="current_date">Last available date</button></p>
     </form>
     <form method="post">
         <p><button type="submit" name="next_day"/>Next day</button></p>
