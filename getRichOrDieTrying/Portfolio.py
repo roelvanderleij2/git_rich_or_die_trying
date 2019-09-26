@@ -1,6 +1,7 @@
 from getRichOrDieTrying.CashAccount import CashAccount
 from getRichOrDieTrying.Utilities import copy_dictionary
 from datetime import datetime, date, timedelta
+import pandas as pd
 
 class Portfolio:
     portfolio_history = {}
@@ -60,7 +61,8 @@ class Portfolio:
             # Increment the return variable with the current security value
             securities_value += market.get_value(ticker, date) * self.fin_products[ticker]
 
-        return securities_value + self.cash_account.value()
+        #return securities_value + self.cash_account.value()
+        return securities_value
 
     def historical_performance(self, market):
 
@@ -68,10 +70,17 @@ class Portfolio:
 
         initial_date = min(self.portfolio_history.keys())
         last_date = datetime.now() - timedelta(days=1)
-        delta = last_date - initial_date
 
-        for i in range(delta.days + 1):
-            day = initial_date + timedelta(days=i)
+        #delta = last_date - initial_date
+
+        #for i in range(delta.days + 1):
+            # day = initial_date + timedelta(days=i)
+            #
+            # day_value = self.get_last_portfolio_state(day).value(market, day)
+            #
+            # historical_portfolio_values[day] = day_value
+
+        for day in pd.bdate_range(initial_date, last_date):
 
             day_value = self.get_last_portfolio_state(day).value(market, day)
 
